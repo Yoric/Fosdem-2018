@@ -1,8 +1,8 @@
 # Making the web faster with the JavaScript Binary AST
 
-## David Teller, Mozilla
+David Teller, Mozilla
 
-## Fosdem 2018
+Fosdem 2018
 
 ---
 
@@ -38,9 +38,9 @@ function foo(x) {
 =>
 
 * `Token.FunctionKeyword`
-* `Token.Identifier("foo")`
+* `Token.Identifier(foo)`
 * `Token.LPar`
-* `Token.Identifier("x")`
+* `Token.Identifier(x)`
 * `Token.RPar`
 * `Token.RBrace`
 * ...
@@ -197,8 +197,9 @@ Parsing JS is hard:
 
 ---
 
-### Objectives
+### What is it?
 
+* A proposal for the JavaScript language, by Mozilla, Bloomberg, Facebook.
 * A new file format for JavaScript code.
 * Smaller than .js, much faster to parse.
 * **Not** uglified.
@@ -283,7 +284,9 @@ FunctionDeclaration {
   * Pretty good size improvements (1).
 * Early 2018: Working on prototype 3
   * Full security (WIP)
-  * Speed not measured.
+  * Reference implementation: ~90%.
+  * Firefox implementation: ~30%.
+  * Speed not measured yet.
   * Size improvements... need improvements (1).
 * Late summer 2018
   * Tests on major websites.
