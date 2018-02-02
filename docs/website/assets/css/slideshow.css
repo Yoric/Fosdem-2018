@@ -1,0 +1,134 @@
+body {
+  font-family: 'Open Sans Condensed'; 
+}
+
+h1, h2, h3 {
+    font-family: 'Yanone Kaffeesatz';
+    font-weight: normal;
+    color: #669297;
+}
+
+.remark-slide-content {
+	font-size: 200%;
+}
+
+      ul {
+        padding-left: 2.5em;
+        margin-top: 0;
+      }
+
+      ul > li:before {
+        content: "■";
+        color: #669297;
+        margin-left: -1.5em;
+        margin-top: 0.2em;
+        width: 1em;
+        position: absolute;
+        font-size: 0.7em;
+      }
+
+      ul li {
+        list-style: none;
+      }
+
+      ul ul > li:before {
+        content: "—";
+        font-weight: bold;
+        color: #669297;
+        margin-left: -1.5em;
+        margin-top: 0.2em;
+        width: 1em;
+        position: absolute;
+        font-size: 0.7em;
+      }
+      ul ul ul > li:before {
+        content: "●";
+        color: #669297;
+        margin-left: -1.5em;
+        margin-top: 0.2em;
+        width: 1em;
+        position: absolute;
+        font-size: 0.7em;
+      }
+
+      .remark-code, .remark-inline-code, .key { font-family: 'Ubuntu Mono', sans; }
+
+      div.figure {
+        text-align: center;
+      }
+
+      span.figure { display: inline-block; }
+
+      span.figure.mathjax {
+        font-size: 0.7em;
+      }
+
+      div.figure.mathjax .MJXc-display {
+        margin: 0;
+      }
+      span.figure.mathjax .MJXc-display {
+        margin: 0;
+      }
+
+      div.figure.mathjax {
+        text-align: center;
+      }
+
+      code {
+        border-radius: 0.4rem;
+      }
+
+     .key {
+        border: 1px solid black;
+        border-radius: 0.15em;
+        padding: 0.1em 0.2em;
+      }
+
+      pre {
+        margin: 0.5em 0 1em 0;
+      }
+
+      p {
+        margin: 1em 0 0.5em 0;
+      }
+
+
+      .remark-slide-content a {
+        text-decoration: none;
+        color: #669297;
+      }
+
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+        font-size: 0.8em;
+      }
+
+      .column3 {
+        float: left;
+        width: 31.9%;
+        padding-right: 1%;
+      }
+
+      .column2 {
+        float: left;
+        width: 49%;
+        padding-right: 1%;
+      }
+
+    .sidenote {
+        position: absolute;
+        right: 5%;
+        top: 45%;
+        font-family: 'Reenie Beanie', cursive;
+        text-shadow: -1px -1px 1px rgba(70, 70, 110, 0.9), 0 1px 1px rgba(200, 200, 255, 1);
+        max-width: 8em;
+        transform: rotate(-21deg);
+        color: rgba(120, 120, 200, 1);
+        font-size: 1.5em;
+        line-height: 0.6em;
+      }
+
+      .red {
+        color: #ff0000;
+      }

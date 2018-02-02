@@ -1,0 +1,506 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Making the web faster with the JavaScript Binary AST - slides</title>
+
+		<link rel="stylesheet" href="assets/css/mermaid.css">
+    <script src="assets/js/mermaid.js"></script>
+    <script>mermaid.initialize({
+			startOnLoad: false,
+			gantt: {
+          "fontSize": 16,
+          "useWidth": 1200
+					"sidePadding": 200
+          // "barHeight": 40
+        }
+		});</script>
+
+		<link rel="stylesheet" href="assets/css/highlight.min.css">
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="assets/css/tipuesearch.css">
+		<link rel="stylesheet" href="assets/css/main.css">
+		<script src='mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+
+		<style>
+			.figure svg:not(:root) {
+				overflow: auto;
+			}
+
+			.figure {
+				text-align: center;
+			}
+
+			.figure > span {
+				display: inline-block;
+				min-width: 50%;
+			}
+
+			.mermaid svg {
+				max-width: 100%;
+			}
+
+			svg .titleText {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    svg .taskText {
+      font-size: 16px;
+    }
+
+    svg .sectionTitle {
+      font-size: 16px;
+    }
+
+    svg .taskTextOutsideRight, svg .taskTextOutsideLeft {
+      font-size: 16px;
+    }
+
+    svg .tick text {
+      font-size: 14px;
+    }
+
+		</style>
+
+
+	</head>
+	<body>
+		<header class="navbar navbar-default navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="">slides</a> <p class="navbar-text hidden-xs">Making the web faster with the JavaScript Binary AST</p>
+				</div>
+
+				<div class="collapse navbar-collapse" id="navbar-collapse-1">
+					<form action="search.html" class="navbar-form navbar-right" role="search">
+						<div class="form-group">
+							<input type="text" name="q" id="tipue_search_input" autocomplete="off" required class="form-control" placeholder="Search">
+						</div>
+					</form>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="binast-slideshow.html" target="_blank">View as slideshow</a></li>
+						<!--li><a href="binast-raw.html">View Markdown</a></li-->
+					</ul>
+				</div>
+			</div>
+		</header>
+
+		<!--
+<div class="toc">
+<p class="lead">Table of contents:</p>
+<p class="toc-1">
+<a href="#making-the-web-faster-with-the-javascript-binary-ast">Making the web faster with the JavaScript Binary AST</a>
+</p>
+<p class="toc-2">
+<a href="#david-teller-mozilla">David Teller, Mozilla</a>
+</p>
+<p class="toc-2">
+<a href="#fosdem-2018">Fosdem 2018</a>
+</p>
+<p class="toc-2">
+<a href="#the-problem">The problem</a>
+</p>
+<p class="toc-2">
+<a href="#why-is-javascript-loading-so-slow-">Why is JavaScript loading so slow?</a>
+</p>
+<p class="toc-3">
+<a href="#1-get-the-code">1. Get the code</a>
+</p>
+<p class="toc-3">
+<a href="#2-tokenize-the-text-1-">2. Tokenize the text (1)</a>
+</p>
+<p class="toc-3">
+<a href="#2-tokenize-the-text-2-">2. Tokenize the text (2)</a>
+</p>
+<p class="toc-3">
+<a href="#3-parse-the-tokens-1-">3. Parse the tokens (1)</a>
+</p>
+<p class="toc-3">
+<a href="#3-parse-the-tokens-2-">3. Parse the tokens (2)</a>
+</p>
+<p class="toc-3">
+<a href="#3-parse-the-tokens-3-">3. Parse the tokens (3)</a>
+</p>
+<p class="toc-3">
+<a href="#3-parse-the-tokens-4-">3. Parse the tokens (4)</a>
+</p>
+<p class="toc-3">
+<a href="#4-wait-there-39-s-more-">4. Wait, there&amp;#39;s more!</a>
+</p>
+<p class="toc-2">
+<a href="#so-what-can-we-make-faster-">So what can we make faster?</a>
+</p>
+<p class="toc-3">
+<a href="#things-people-have-tried">Things people have tried</a>
+</p>
+<p class="toc-2">
+<a href="#introducing-the-javascript-binary-ast">Introducing the JavaScript Binary AST</a>
+</p>
+<p class="toc-3">
+<a href="#objectives">Objectives</a>
+</p>
+<p class="toc-3">
+<a href="#recall-the-ast-">Recall the AST?</a>
+</p>
+<p class="toc-3">
+<a href="#transform-it-to-this-">Transform it to this:</a>
+</p>
+<p class="toc-3">
+<a href="#flow">Flow</a>
+</p>
+<p class="toc-3">
+<a href="#what-is-faster-">What is faster?</a>
+</p>
+<p class="toc-3">
+<a href="#calendar">Calendar</a>
+</p>
+<p class="toc-2">
+<a href="#is-there-time-for-a-demo-">Is there time for a demo?</a>
+</p>
+<p class="toc-2">
+<a href="#thanks-for-listening-">Thanks for listening.</a>
+</p>
+<p class="toc-3">
+<a href="#any-questions-">Any questions?</a>
+</p>
+</div>
+-->
+
+		<div class="container">
+			<div class="row">
+				<nav id="sidebar" class="col-lg-2 col-sm-3">
+					<ul class="nav nav-pills nav-stacked">
+					</ul>
+					<!--
+Available versions:<br>
+raw<br>
+->binast-raw.html<br>
+slideshow<br>
+->binast-slideshow.html<br>
+default<br>
+->binast.html<br>
+<br>
+Document informations:<br>
+binast.md<br><br>
+active
+-->
+				</nav>
+				<header>
+					<div class="entry-meta text-right">
+
+					</div>
+				</header>
+				<article id="content" class="col-lg-10 col-sm-9">
+					<h1 id="making-the-web-faster-with-the-javascript-binary-ast">Making the web faster with the JavaScript Binary AST</h1>
+<h2 id="david-teller-mozilla">David Teller, Mozilla</h2>
+<h2 id="fosdem-2018">Fosdem 2018</h2>
+<hr>
+<h2 id="the-problem">The problem</h2>
+<ul>
+<li>Google Sheets, Google Docs, Yahoo!, LinkedIn, Facebook: 3-7 compressed Mb+ JS code.</li>
+<li>Updated <em>very</em> often.</li>
+<li>Facebook: 500-900ms just <em>parsing</em> JavaScript (Chrome &amp; Firefox).</li>
+</ul>
+<hr>
+<h2 id="why-is-javascript-loading-so-slow-">Why is JavaScript loading so slow?</h2>
+<hr>
+<h3 id="1-get-the-code">1. Get the code</h3>
+<ul>
+<li>Download and decompress source file.</li>
+<li>Covert encoding.
+...</li>
+</ul>
+<hr>
+<h3 id="2-tokenize-the-text-1-">2. Tokenize the text (1)</h3>
+<pre><code class="lang-js">function foo(x) {
+    return y;
+}
+</code></pre>
+<p>=&gt;</p>
+<ul>
+<li><code>Token.FunctionKeyword</code></li>
+<li><code>Token.Identifier(&quot;foo&quot;)</code></li>
+<li><code>Token.LPar</code></li>
+<li><code>Token.Identifier(&quot;x&quot;)</code></li>
+<li><code>Token.RPar</code></li>
+<li><code>Token.RBrace</code></li>
+<li>...</li>
+</ul>
+<hr>
+<h3 id="2-tokenize-the-text-2-">2. Tokenize the text (2)</h3>
+<p>Tokenizing JS is hard:</p>
+<ul>
+<li>What does <code>/</code> mean?</li>
+<li>Is <code>for</code> an identifier or a keyword?</li>
+<li>How can I store my string efficiently?</li>
+<li>Is <code>&quot;use strict&quot;</code> a string or a directive?</li>
+<li>...</li>
+</ul>
+<p><strong>Hint</strong> it depends.</p>
+<hr>
+<h3 id="3-parse-the-tokens-1-">3. Parse the tokens (1)</h3>
+<pre><code class="lang-rust">FunctionDeclaration {
+    isAsync: false,
+    isGenerator: false,
+    scope: ...,
+    name: BindingIdentifier {
+        name: &quot;foo&quot;
+    }
+    params: FormalParameters {
+        items: [
+            BindingIdentifier {
+                name: &quot;x&quot;
+            }
+        ]
+        rest: null,
+    }
+    body: FunctionBody {
+        directives: [],
+        statements: [
+            ReturnStatement {
+                expression: {
+                    IdentifierExpression {
+                        name: &quot;y&quot;
+                    }
+                }
+            }
+        ]
+    }
+}
+</code></pre>
+<hr>
+<h3 id="3-parse-the-tokens-2-">3. Parse the tokens (2)</h3>
+<p>Exercise:</p>
+<pre><code class="lang-js">var x = 10;
+function foo(isReady) {
+    if (isReady) {
+        return x + 10;
+    }
+    // ...
+}
+</code></pre>
+<p>What is the return of <code>foo(true)</code>?</p>
+<p><strong>Hint</strong> it depends.</p>
+<hr>
+<h3 id="3-parse-the-tokens-3-">3. Parse the tokens (3)</h3>
+<p>Parsing JS is hard:</p>
+<pre><code class="lang-js">var x = 10;
+function foo(isReady) {
+    if (isReady) {
+        return x + 10;
+    }
+}
+console.log(foo(true)); // `20`
+
+var x = 10;
+function foo(isReady) {
+    if (isReady) {
+        return x + 10;
+    }
+    var x = 10;
+}
+console.log(foo(true)); // `NaN`
+</code></pre>
+<hr>
+<h3 id="3-parse-the-tokens-4-">3. Parse the tokens (4)</h3>
+<p>Parsing JS is hard:</p>
+<ul>
+<li>syntax depends on <code>&quot;use strict&quot;</code>;</li>
+<li>variables and <code>this</code> are so complicated, man!;</li>
+<li>result depends on the presence of <code>eval</code>, <code>with</code>, ...;</li>
+<li>you can&#39;t skip anything;</li>
+</ul>
+<hr>
+<h3 id="4-wait-there-39-s-more-">4. Wait, there&#39;s more!</h3>
+<ul>
+<li>Generate browser-specific bytecode.</li>
+<li>Execute!</li>
+</ul>
+<hr>
+<h2 id="so-what-can-we-make-faster-">So what can we make faster?</h2>
+<ol>
+<li>Download source file.</li>
+<li>Decompress source file.</li>
+<li>Convert encoding.</li>
+<li>Tokenize.</li>
+<li>Parse.</li>
+<li>Generate Bytecode.</li>
+<li>Start execution.</li>
+</ol>
+<hr>
+<h3 id="things-people-have-tried">Things people have tried</h3>
+<ul>
+<li>Browser improvements<ul>
+<li>Lazy parsers (1)</li>
+<li>Bytecode caching (4)</li>
+</ul>
+</li>
+<li>JavaScript frameworks/toolchains<ul>
+<li>Lazy loaders (2)</li>
+<li>Minimizers (1)</li>
+</ul>
+</li>
+<li>Browser APIs<ul>
+<li>ServiceWorker loaders (2, 3)</li>
+<li>Wasm (2)</li>
+</ul>
+</li>
+</ul>
+<p>(1) Impacts global performance.</p>
+<p>(2) Requires rewrite.</p>
+<p>(3) Hurts the web.</p>
+<p>(4) Works when the JS of the page doesn&#39;t change.</p>
+<hr>
+<h2 id="introducing-the-javascript-binary-ast">Introducing the JavaScript Binary AST</h2>
+<hr>
+<h3 id="objectives">Objectives</h3>
+<ul>
+<li>A new file format for JavaScript code.</li>
+<li>Smaller than .js, much faster to parse.</li>
+<li><strong>Not</strong> uglified.</li>
+</ul>
+<hr>
+<h3 id="recall-the-ast-">Recall the AST?</h3>
+<pre><code class="lang-rust">FunctionDeclaration {
+    isAsync: false,
+    isGenerator: false,
+    scope: ...,
+    name: BindingIdentifier {
+        name: &quot;foo&quot;
+    }
+    params: FormalParameters {
+        items: [
+            BindingIdentifier {
+                name: &quot;x&quot;
+            }
+        ]
+        rest: null,
+    }
+    body: FunctionBody {
+        directives: [],
+        statements: [
+            ReturnStatement {
+                expression: {
+                    IdentifierExpression {
+                        name: &quot;y&quot;
+                    }
+                }
+            }
+        ]
+    }
+}
+</code></pre>
+<hr>
+<h3 id="transform-it-to-this-">Transform it to this:</h3>
+<pre><code class="lang-js">1: &quot;foo&quot;,
+[/*FunctionDeclaration*/ 42,  /*isAsync*/0, /*isGenerator*/0, ..., /*name*//*BindingIdentifier*/ 43, /*foo*/1, ...]
+</code></pre>
+<p>(except compressed)</p>
+<hr>
+<h3 id="flow">Flow</h3>
+<ol>
+<li>Download binjs file.</li>
+<li>Tokenize + Parse <strong>only what you use</strong>.</li>
+<li>Generate Bytecode.</li>
+<li>Start execution.</li>
+</ol>
+<hr>
+<h3 id="what-is-faster-">What is faster?</h3>
+<ol>
+<li>Smaller file (1).</li>
+<li>Parsing can start earlier.</li>
+<li>Trivial tokenization.</li>
+<li>Format is <strong>proof-carrying</strong>.<ul>
+<li>Hard cases <code>this</code>, <code>var</code>, <code>let</code>, ... are already processed.</li>
+</ul>
+</li>
+<li>Parse only the code you execute, when needed.</li>
+<li>Parse strings, identifiers, ... only once.</li>
+<li>More opportunities for concurrency.</li>
+</ol>
+<p>(1) Hopefully.</p>
+<hr>
+<h3 id="calendar">Calendar</h3>
+<ul>
+<li>Early 2017: Proof of concept<ul>
+<li>No security.</li>
+<li>Extreme speed improvements (1).</li>
+<li>Pretty good size improvements (1).</li>
+</ul>
+</li>
+<li>Early 2018: Working on prototype 3<ul>
+<li>Full security (WIP)</li>
+<li>Speed not measured.</li>
+<li>Size improvements... need improvements (1).</li>
+</ul>
+</li>
+<li>Late summer 2018<ul>
+<li>Tests on major websites.</li>
+</ul>
+</li>
+</ul>
+<p>(1) No hard numbers because it&#39;s too early to make promises.</p>
+<hr>
+<h2 id="is-there-time-for-a-demo-">Is there time for a demo?</h2>
+<hr>
+<h2 id="thanks-for-listening-">Thanks for listening.</h2>
+<h3 id="any-questions-">Any questions?</h3>
+
+				</article>
+			</div>
+		</div>
+
+		<footer><a href="site-index.html">Pages index</a>
+</footer>
+
+		<script src="assets/js/jquery.js"></script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<script src="assets/js/highlight.min.js"></script>
+		<script src="assets/js/tipuesearch_set.js"></script>
+		<script src="assets/js/tipuesearch.min.js"></script>
+		<script>
+			$(function() {
+				hljs.initHighlightingOnLoad();
+				$('#tipue_search_input').tipuesearch({
+					mode: 'json',
+					contentLocation: 'index.json'
+				});
+			});
+		</script>
+		<script src="/socket.io/socket.io.js"></script><script>socket = io.connect();socket.on('reload', function() { console.log("reload: ", location); location.reload(); });</script>
+		<!-- Generated by Vegetables from 'binast.md' with format 'default' - '2/2/2018, 10:57:34 PM' -->
+
+		<script>
+			var mermaids = document.querySelectorAll('.mermaid');
+			console.log(mermaids);
+ 			function _svgReplacement(match, code){
+			  return code.replace(/(view[bB]ox="\d+\s+\d+\s+(\d+)\s+(\d+)")/,
+				function(m, vb, w, h){
+					return vb+' width="'+ w + 'pt" height="'+h+'pt"';
+				});
+                        }
+
+			for (var i = 0; i < mermaids.length; i++) {
+				var elem = mermaids[i];
+				mermaidAPI.render('mermaid-graph-'+i, elem.textContent.trim(), function(html) {
+					var innerHTML = html
+						.replace(/(<svg[^>]*)height="[^"]*"\s*/, function(match, code) { return code; })
+						.replace(/(<svg[^>]*)width="[^"]*"\s*/, function(match, code) { return code; })
+						.replace(/(<svg[^>]*)style="[^"]*"\s*/, function(match, code) { return code; })
+						.replace(/(<svg[^>]*view[bB]ox="\d+\s+\d+\s+(\d+)\s+(\d+)")/, function(m, vb, w, h) {
+                                                    return vb + ' width="' + w + 'pt" height="' + h + 'pt"';
+                                                });
+                                       console.log("innerHTML", innerHTML);
+                                       elem.innerHTML = innerHTML;
+				});
+			}
+		</script>
+
+	</body>
+</html>
