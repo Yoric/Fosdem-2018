@@ -1,37 +1,74 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<title>Making the web faster with the JavaScript Binary AST</title>
-	<link rel="stylesheet" href="assets/css/reveal/reveal.css">
-	<link rel="stylesheet" href="assets/css/reveal/theme/white.css">
-	<link rel="stylesheet" href="assets/css/highlight-hybrid.css">
-	<link rel="stylesheet" href="assets/css/slideshow.css">
-	<style>
-	</style>
-	<!--  -->
-</head>
-<body>
-	<div class="reveal">
-		<div class="slides">
-			<section data-markdown
-			data-separator="(^#HSLIDE$|^#HSLIDE\?.*)"
-			data-separator-vertical="(^#VSLIDE$|^#VSLIDE\?.*)"
-			data-separator-notes="^Presentation note:"
-			data-charset="utf-8">
-			<script type="text/template">
-				# Making the web faster with the JavaScript Binary AST
-#HSLIDE
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="stylesheet" href="assets/css/slideshow.css">
+    <title>Making the web faster with the JavaScript Binary AST</title>
+
+    <link rel="stylesheet" href="assets/css/mermaid.css">
+    <script src="assets/js/mermaid.js"></script>
+    <script>
+      mermaid.initialize({
+        startOnLoad: false,
+        gantt: {
+          "fontSize": 30,
+          "useWidth": 1200,
+          "barHeight": 40,
+          "sidePadding": 200
+        }
+      });
+
+    </script>
+    <style>
+    .mermaid {
+      display: none;
+    }
+    .mermaid-display {
+      font-size: 0.5em;
+    }
+    .mermaid-display svg {
+				max-width: 100%;
+		}
+
+    svg .titleText {
+      font-size: 25px;
+      font-weight: bold;
+    }
+    svg .taskText {
+      font-size: 30px;
+    }
+
+    svg .sectionTitle {
+      font-size: 30px;
+    }
+
+    svg .tick text {
+      font-size: 18px;
+    }
+
+    svg .taskTextOutsideRight, svg .taskTextOutsideLeft {
+      font-size: 25px;
+    }
+
+    </style>
+
+
+  </head>
+  <body>
+    <textarea id="source"># Making the web faster with the JavaScript Binary AST
+
+---
+class: center, middle, main-title
 
 ## David Teller, Mozilla
-#HSLIDE
 
+---
 ## Fosdem 2018
 
 ---
-#HSLIDE
-
 ## The problem
 
 - Google Sheets, Google Docs, Yahoo!, LinkedIn, Facebook: 3-7 compressed Mb+ JS code.
@@ -40,13 +77,9 @@
 
 
 ---
-#HSLIDE
-
 ## Why is JavaScript loading so slow?
 
 ---
-#VSLIDE
-
 ### 1. Get the code
 
 - Download and decompress source file.
@@ -55,8 +88,6 @@
 
 
 ---
-#VSLIDE
-
 ### 2. Tokenize the text (1)
 ```js
 function foo(x) {
@@ -76,8 +107,6 @@ function foo(x) {
 
 
 ---
-#VSLIDE
-
 ### 2. Tokenize the text (2)
 Tokenizing JS is hard:
 
@@ -92,8 +121,6 @@ Tokenizing JS is hard:
 
 
 ---
-#VSLIDE
-
 ### 3. Parse the tokens (1)
 ```rust
 FunctionDeclaration {
@@ -127,8 +154,6 @@ FunctionDeclaration {
 ```
 
 ---
-#VSLIDE
-
 ### 3. Parse the tokens (2)
 Exercise:
 
@@ -147,8 +172,6 @@ What is the return of `foo(true)`?
 
 
 ---
-#VSLIDE
-
 ### 3. Parse the tokens (3)
 Parsing JS is hard:
 
@@ -172,8 +195,6 @@ console.log(foo(true)); // `NaN`
 ```
 
 ---
-#VSLIDE
-
 ### 3. Parse the tokens (4)
 Parsing JS is hard:
 
@@ -185,8 +206,6 @@ Parsing JS is hard:
 
 
 ---
-#VSLIDE
-
 ### 4. Wait, there&#39;s more!
 
 - Generate browser-specific bytecode.
@@ -194,8 +213,6 @@ Parsing JS is hard:
 
 
 ---
-#HSLIDE
-
 ## So what can we make faster?
 
 1. Download source file.
@@ -208,8 +225,6 @@ Parsing JS is hard:
 
 
 ---
-#VSLIDE
-
 ### Things people have tried
 
 - Browser improvements
@@ -232,13 +247,9 @@ Parsing JS is hard:
 
 
 ---
-#HSLIDE
-
 ## Introducing the JavaScript Binary AST
 
 ---
-#VSLIDE
-
 ### Objectives
 
 - A new file format for JavaScript code.
@@ -247,8 +258,6 @@ Parsing JS is hard:
 
 
 ---
-#VSLIDE
-
 ### Recall the AST?
 ```rust
 FunctionDeclaration {
@@ -282,8 +291,6 @@ FunctionDeclaration {
 ```
 
 ---
-#VSLIDE
-
 ### Transform it to this:
 ```js
 1: "foo",
@@ -293,8 +300,6 @@ FunctionDeclaration {
 
 
 ---
-#VSLIDE
-
 ### Flow
 
 1. Download binjs file.
@@ -304,8 +309,6 @@ FunctionDeclaration {
 
 
 ---
-#VSLIDE
-
 ### What is faster?
 
 1. Smaller file (1).
@@ -321,8 +324,6 @@ FunctionDeclaration {
 
 
 ---
-#VSLIDE
-
 ### Calendar
 
 - Early 2017: Proof of concept
@@ -340,77 +341,56 @@ FunctionDeclaration {
 
 
 ---
-#HSLIDE
-
 ## Is there time for a demo?
 
 ---
-#HSLIDE
-
 ## Thanks for listening.
-#VSLIDE
 
+---
 ### Any questions?
+</textarea>
+    <script src="assets/js/remark.min.js"></script>
+    <script>
+      window.my_slideshow_mermaid_counter = 0;
+      function displayMermaidDiagram() {
+        var currentSlide = document.querySelector('.remark-visible')
+        console.log("currentSlide", currentSlide)
+        var mermaids = currentSlide.querySelectorAll('.mermaid')
+        for (var i = 0; i < mermaids.length; i++) {
+          var elem = mermaids[i];
+          console.log("elem", elem);
+          var sibling = elem.nextElementSibling;
+          if (sibling) {
+            if ( sibling.classList.contains('mermaid-display')) {
+              elem.nextElementSibling.remove();
+            }
+          }
+          mermaidAPI.render(
+            'mermaid-figure-'+(my_slideshow_mermaid_counter++),
+            elem.textContent.trim(),
+            function(html) {
+              var div = document.createElement('div');
+              div.classList.add('mermaid-display');
+              div.innerHTML = html;
+              elem.parentNode.insertBefore(div, elem.nextSibling);
+            }
+          );
+        }
+      }
 
-			</script>
-		</section>
-	</div>
-</div>
+      var slideshow = remark.create({
+         ratio: '16:9',
+         highlightStyle: 'tomorrow-night',
+         highlightLanguage: 'remark',
+         highlightLines: true
+      });
 
-<script src="assets/js/reveal/reveal.js"></script>
-<script src="assets/js/reveal/lib/head.min.js"></script>
-<script src="assets/js/jquery.js"></script>
-<script>
-Reveal.initialize({
-	embedded: true,
-	margin: 0.0,
-	showNotes: false,
-	transition: 'slide',
-	autoSlide: 0,
-	loop: false,
-	center: true,
-	rtl: false,
-	shuffle: false,
-	mouseWheel: false,
-	history: true,
+      slideshow.on('afterShowSlide', function(slide) {
+        displayMermaidDiagram();
+      });
 
-	// disabled for now
-	// math: {
-	// 	mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
-	// 	config: 'TeX-AMS_HTML-full'
-	// },
-
-	dependencies: [
-		{ src: "assets/js/reveal/plugin/markdown/marked.js"},
-		{ src: "assets/js/reveal/plugin/markdown/markdown.js"},
-		{ src: "assets/js/reveal/plugin/notes/notes.js"},
-		// { src: "assets/js/reveal/plugin/math/math.js", async: true }
-		{ src: "assets/js/reveal/plugin/highlight/highlight.js", async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-	]
-});
-
-Reveal.configure({
-	keyboard: {
-		67: function() { // bind "s" key to "select" code block content
-
-		var currentSlide = Reveal.getCurrentSlide();
-		var preBlock = $(currentSlide).find("pre");
-
-		if(preBlock.length > 0) {
-
-			if (window.getSelection) {
-				var range = document.createRange();
-				range.selectNodeContents(preBlock[0]);
-				var selection = window.getSelection();
-				selection.removeAllRanges();
-				selection.addRange(range);
-			}
-		}
-	}
-}
-});
-
-</script>
-
-</body>
+      displayMermaidDiagram();
+    </script>
+    <script src="/socket.io/socket.io.js"></script><script>socket = io.connect();socket.on('reload', function() { console.log("reload: ", location); location.reload(); });</script>
+  </body>
 </html>
