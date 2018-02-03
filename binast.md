@@ -1,4 +1,6 @@
-# Making the web faster with the JavaScript Binary AST
+# The JavaScript Binary AST
+
+A proposal to speed up the web by Mozilla, Bloomberg, Facebook.
 
 David Teller, Mozilla
 
@@ -11,6 +13,7 @@ Fosdem 2018
 - Google Sheets, Google Docs, Yahoo!, LinkedIn, Facebook: 3-7 compressed Mb+ JS code.
 - Updated *very* often.
 - Facebook: 500-900ms just *parsing* JavaScript (Chrome & Firefox).
+- How can we make JS code start executing faster?
 
 ---
 
@@ -18,15 +21,32 @@ Fosdem 2018
 
 ---
 
-### 1. Get the code
+### A few simple steps
 
-* Download and decompress source file.
-* Covert encoding.
-...
+1. Download source file.
+1. Decompress source file.
+1. Convert encoding.
+1. Tokenize.
+1. Parse.
+1. Generate Bytecode.
+1. Start execution.
 
 ---
 
-### 2. Tokenize the text (1)
+![Would That It Were So Simple](img/wouldthatitweresosimple.gif)
+
+---
+
+### Step 1: Get the code
+
+* Download and decompress source file.
+* Covert encoding.
+
+(typically two/three successive tasks)
+
+---
+
+### Step 2. Tokenize the text (1)
 
 
 ```js
@@ -35,7 +55,7 @@ function foo(x) {
 }
 ```
 
-=>
+.center[⇓]
 
 * `Token.FunctionKeyword`
 * `Token.Identifier(foo)`
@@ -47,60 +67,67 @@ function foo(x) {
 
 ---
 
-### 2. Tokenize the text (2)
+### Step 2. Tokenize the text (2)
 
-Tokenizing JS is hard:
+Exercises:
+
+* Is `for` an identifier or a keyword?
+--
 
 * What does `/` mean?
-* Is `for` an identifier or a keyword?
-* How can I store my string efficiently?
+--
+
 * Is `"use strict"` a string or a directive?
+--
+
+* How can I store my string efficiently?
+
+--
+
 * ...
+
+--
 
 **Hint** it depends.
 
+--
+
+Yeah, tokenization is hard. .mini[![Would That It Were So Simple](img/wouldthatitweresosimple.gif)]
+
+
 ---
 
-### 3. Parse the tokens (1)
+### Step 3. Parse the tokens (1)
 
-```rust
-FunctionDeclaration {
-    isAsync: false,
-    isGenerator: false,
+`[FunctionKeyword, Identifier(foo), ...]`
+
+.center[⇓]
+
+
+```yaml
+FunctionDeclaration:
+    isAsync: false
+    isGenerator: false
     scope: ...,
-    name: BindingIdentifier {
-        name: "foo"
-    }
-    params: FormalParameters {
-        items: [
-            BindingIdentifier {
-                name: "x"
-            }
-        ]
+    name:
+        BindingIdentifier:
+            name: "foo"
+    params:
+        FormalParameters:
+            items:
+                BindingIdentifier:
+                    name: "x"
         rest: null,
-    }
-    body: FunctionBody {
-        directives: [],
-        statements: [
-            ReturnStatement {
-                expression: {
-                    IdentifierExpression {
-                        name: "y"
-                    }
-                }
-            }
-        ]
-    }
-}
+    body: ...
 ```
 
 ---
 
-### 3. Parse the tokens (2)
+### Step 3. Parse the tokens (2)
 
 Exercise:
 
-```js
+```javascript
 var x = 10;
 function foo(isReady) {
     if (isReady) {
@@ -116,7 +143,7 @@ What is the return of `foo(true)`?
 
 ---
 
-### 3. Parse the tokens (3)
+### Step 3. Parse the tokens (3)
 
 Parsing JS is hard:
 
@@ -141,9 +168,9 @@ console.log(foo(true)); // `NaN`
 
 ---
 
-### 3. Parse the tokens (4)
+### Step 3. Parse the tokens (4)
 
-Parsing JS is hard:
+.center[.mini[![Would That It Were So Simple](img/wouldthatitweresosimple.gif)]]
 
 * syntax depends on `"use strict"`;
 * variables and `this` are so complicated, man!;
@@ -152,7 +179,7 @@ Parsing JS is hard:
 
 ---
 
-### 4. Wait, there's more!
+### Steps 4, 5. Wait, there's more!
 
 * Generate browser-specific bytecode.
 * Execute!
@@ -174,22 +201,24 @@ Parsing JS is hard:
 ### Things people have tried
 
 * Browser improvements
-  * Lazy parsers (1)
-  * Bytecode caching (4)
+   * Lazy parsers (1)
+   * Bytecode caching (2)
 * JavaScript frameworks/toolchains
-  * Lazy loaders (2)
   * Minimizers (1)
+  * Lazy loaders (3)
 * Browser APIs
-  * ServiceWorker loaders (2, 3)
-  * Wasm (2)
+  * Wasm (3)
+  * ServiceWorker loaders (3, 4)
 
+.small[
 (1) Impacts global performance.
 
-(2) Requires rewrite.
+(2) When the JS of the page doesn't change.
 
-(3) Hurts the web.
+(3) Requires rewrite. Might not help.
 
-(4) Works when the JS of the page doesn't change.
+(4) Hurts the web.
+]
 
 ---
 
@@ -203,45 +232,35 @@ Parsing JS is hard:
 * A new file format for JavaScript code.
 * Smaller than .js, much faster to parse.
 * **Not** uglified.
+* **Not** a bytecode.
 
 ---
 
-### Recall the AST?
+### Recall parsing
 
-```rust
-FunctionDeclaration {
-    isAsync: false,
-    isGenerator: false,
+
+```yaml
+FunctionDeclaration:
+    isAsync: false
+    isGenerator: false
     scope: ...,
-    name: BindingIdentifier {
-        name: "foo"
-    }
-    params: FormalParameters {
-        items: [
-            BindingIdentifier {
-                name: "x"
-            }
-        ]
+    name:
+        BindingIdentifier:
+            name: "foo"
+    params:
+        FormalParameters:
+            items:
+                BindingIdentifier:
+                    name: "x"
         rest: null,
-    }
-    body: FunctionBody {
-        directives: [],
-        statements: [
-            ReturnStatement {
-                expression: {
-                    IdentifierExpression {
-                        name: "y"
-                    }
-                }
-            }
-        ]
-    }
-}
+    body: ...
 ```
 
+That's an Abstract Syntax Tree (AST).
+
 ---
 
-### Transform it to this:
+### Storing the AST
 
 ```js
 1: "foo",
@@ -252,7 +271,11 @@ FunctionDeclaration {
 
 ---
 
-### Flow
+## What's the point?
+
+---
+
+### Things the browser needs to do.
 
 1. Download binjs file.
 1. Tokenize + Parse **only what you use**.
@@ -267,7 +290,7 @@ FunctionDeclaration {
 1. Parsing can start earlier.
 1. Trivial tokenization.
 1. Format is **proof-carrying**.
-  * Hard cases `this`, `var`, `let`, ... are already processed.
+  * Hard cases are already processed.
 1. Parse only the code you execute, when needed.
 1. Parse strings, identifiers, ... only once.
 1. More opportunities for concurrency.
@@ -276,30 +299,49 @@ FunctionDeclaration {
 
 ---
 
-### Calendar
+## Is there time for a demo?
 
-* Early 2017: Proof of concept
-  * No security.
-  * Extreme speed improvements (1).
-  * Pretty good size improvements (1).
-* Early 2018: Working on prototype 3
-  * Full security (WIP)
-  * Reference implementation: ~90%.
-  * Firefox implementation: ~30%.
-  * Speed not measured yet.
-  * Size improvements... need improvements (1).
-* Late summer 2018
-  * Tests on major websites.
+---
+
+## Calendar
+
+---
+
+### Early 2017
+
+* Status: Proof of concept.
+* Security: None.
+* Speed: Extreme improvements (1).
+* File size: Pretty good improvements (1).
+* Standardization: Ecma step 1.
 
 (1) No hard numbers because it's too early to make promises.
 
 ---
 
-## Is there time for a demo?
+### Early 2018
+
+* Status: Prototype 3.
+* Security: As much as JavaScript, just easier to check.
+* Reference implementation: ~90%.
+* Firefox implementation: ~30%
+* Speed: Not measured yet.
+* File size: Improvements... but we want more.
+* Specifications: High-level specifications ~90%.
 
 
 ---
 
+### Hopefully late summer 2018
+
+* Experimental deployment on a few major websites.
+* Firefox implementation for opt-in users.
+* Discussion with other browser vendors on further optimizations.
+
+---
+
 ## Thanks for listening.
+
+![It's that simple](img/simple.png)
 
 ### Any questions?

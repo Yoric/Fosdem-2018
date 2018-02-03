@@ -1,0 +1,212 @@
+* {
+    .box-sizing(border-box);
+}
+*:before,
+*:after {
+    .box-sizing(border-box);
+}
+
+html {
+    font-size: 100%;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 24px;
+    line-height: 1.5;
+    color: #555555;
+    background-color: #FFFFFF;
+}
+
+a {
+    color: #80a000;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover, a:focus {
+    color: #576d00;
+    text-decoration: underline;
+}
+
+a:focus {
+    outline: 3px solid #80a000;
+    outline-offset: 0;
+    background-color: #80a000;
+    color: #FFF;
+    text-decoration: none;
+}
+
+ol {
+    list-style-type: decimal;
+    padding: 0 0 0 1.5em;
+    margin: 1em 0;
+}
+
+ul {
+    list-style-type: none;
+    margin: 1em 0;
+    padding: 0;
+}
+
+li ul {
+    margin-top: 0em;
+    margin-left: 2em;
+}
+
+ul li:before {
+    content: "\25cf";
+    color: #00989e;
+    padding-right: 6px;
+}
+
+img {
+    vertical-align: middle;
+    max-height: 600px;
+    margin: 0 auto 1em;
+    display: block;
+}
+
+hr {
+    height: 0;
+    margin: 1em 0;
+    border: 0;
+    border-top: 1px solid #cccccc;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "graze-pro";
+    letter-spacing: -0.04em;
+    font-weight: 500;
+    margin: 1em 0 0.5em;
+}
+
+b,
+strong {
+    font-weight: 500;
+}
+
+blockquote {
+    border-left: 5px solid #cccccc;
+    padding-left: 1em;
+    margin: 1em -2em;
+    font-style: italic;
+    color: #999999;
+}
+
+.remark-slide-number {
+    display: none;
+}
+
+.remark-slide {
+    display: table;
+}
+
+.remark-slide-content {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 6em;
+    border-bottom: 18px solid black;
+    font-size: 24px;
+}
+
+.remark-slide-content:after {
+    content: "";
+    position: absolute;
+    bottom: 10px;
+    right: 0px;
+    height: 40px;
+    width: 120px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url('mozilla.svg');
+}
+
+.remark-slide-content h1 {
+    font-size: 56px;
+    color: #00989e;
+}
+
+.remark-slide-content h2 {
+    font-size: 48px;
+    color: #00989e;
+}
+
+.remark-slide-content h3 {
+    font-size: 40px;
+}
+
+.remark-slide-content h4 {
+    font-size: 36px;
+}
+
+.remark-slide-content h5 {
+    font-size: 30px;
+}
+
+.remark-slide-content h6 {
+    font-size: 24px;
+}
+
+.remark-slide-content > :first-child {
+    margin-top: 0;
+}
+
+.remark-slide-content > :last-child {
+    margin-bottom: 0;
+}
+
+.remark-inline-code {
+    background-color:rgb(245, 245, 245);
+    border: 1px inset black;
+    
+}
+
+.remark-code-line {
+    white-space: pre;
+    background-color: #000;
+    border: 1px solid #000;
+    color: #fff;
+    padding: 0 1em;
+}
+
+.remark-code-line .hljs-string {
+    color: rgb(200, 110, 110)
+}
+
+.remark-code-line .hljs-keyword {
+    color: rgb(0, 255, 0)
+}
+
+.remark-code-line .hljs-literal {
+    color: rgb(155, 155, 0)
+}
+
+.remark-code-line .hljs-number {
+    color: rgb(150, 150, 255)
+}
+
+.mini img {
+    max-height: 2em;
+    display: inline;
+}
+
+.thatsimple img {
+    max-height: 300px;
+}
+
+.small {
+    font-size: small
+}
+
+/*
+     FILE ARCHIVED ON 13:47:02 Dec 06, 2016 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 22:18:20 Feb 02, 2018.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
