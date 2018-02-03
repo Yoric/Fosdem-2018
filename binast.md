@@ -10,16 +10,24 @@
 
 ---
 
-## The problem
+## Making the web fast enough?
 
 - On the web, there's no such thing as fast enough.
 - JavaScript has become very fast but...
 
---
+---
 
-- Google Sheets, Google Docs, Yahoo!, LinkedIn, Facebook: 3-7 compressed Mb+ JS code.
+## ...looking at trends
+
+- How much JS in Google Sheets, Google Docs, Yahoo!, LinkedIn, Facebook?
+    - 3-7 compressed Mb+ JS code.
+--
 - Updated *very* often.
-- Facebook: 500-900ms just *parsing* JavaScript (Chrome & Firefox).
+    - Sometimes every 5 minutes.
+--
+- Facebook: 500-900ms just *parsing* JavaScript
+    - Chrome & Firefox.
+--
 - And things are only getting worse.
 
 ---
@@ -380,10 +388,18 @@ That's an Abstract Syntax Tree (AST).
 * Firefox implementation for opt-in users.
 * Discussion with other browser vendors on further optimizations.
 
+--
+
+* Your help welcome :)
+    * https://github.com/binast/binjs-ref
+    * https://binast.github.io/ecmascript-binary-ast/
+
 ---
 
 ## Thanks for listening.
 
 ![It's that simple](img/simple.png)
+
+[.github[![Fork me on github](img/github.png)]](https://github.com/Yoric/Fosdem-2018)
 
 ### Any questions?

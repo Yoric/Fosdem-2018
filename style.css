@@ -206,6 +206,12 @@ blockquote {
     font-size: small
 }
 
+.github {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 0
+}
 /*
      FILE ARCHIVED ON 13:47:02 Dec 06, 2016 AND RETRIEVED FROM THE
      INTERNET ARCHIVE ON 22:18:20 Feb 02, 2018.
