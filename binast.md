@@ -101,8 +101,11 @@ Yeah, tokenization is hard. .mini[![Would That It Were So Simple](img/wouldthati
 
 `[FunctionKeyword, Identifier(foo), ...]`
 
+--
+
 .center[⇓]
 
+--
 
 ```yaml
 FunctionDeclaration:
@@ -113,9 +116,9 @@ FunctionDeclaration:
         BindingIdentifier:
             name: "foo"
     params:
-        FormalParameters:
+        - FormalParameters:
             items:
-                BindingIdentifier:
+                - BindingIdentifier:
                     name: "x"
         rest: null,
     body: ...
@@ -138,6 +141,8 @@ function foo(isReady) {
 ```
 
 What is the return of `foo(true)`?
+
+--
 
 **Hint** it depends.
 
@@ -170,17 +175,34 @@ console.log(foo(true)); // `NaN`
 
 ### Step 3. Parse the tokens (4)
 
-.center[.mini[![Would That It Were So Simple](img/wouldthatitweresosimple.gif)]]
 
-* syntax depends on `"use strict"`;
-* variables and `this` are so complicated, man!;
-* result depends on the presence of `eval`, `with`, ...;
-* you can't skip anything;
+* ...handle variables .mini[![Would That It Were So Simple](img/wouldthatitweresosimple.gif)];
+
+--
+
+* ...handle `this` .mini[![Would That It Were So Simple](img/wouldthatitweresosimple.gif)];
+
+--
+
+* ...handle `eval` .mini[![Would That It Were So Simple](img/wouldthatitweresosimple.gif)];
+
+--
+
+* ...handle `with` .mini[![Would That It Were So Simple](img/wouldthatitweresosimple.gif)];
+
+--
+
+* ...handle `"use strict"` .mini[![Would That It Were So Simple](img/wouldthatitweresosimple.gif)];
+
+--
+
+* also, you can't skip anything;
 
 ---
 
-### Steps 4, 5. Wait, there's more!
+### Step 4. Wait, there's more!
 
+* Perform safety-checks on the code.
 * Generate browser-specific bytecode.
 * Execute!
 
@@ -193,6 +215,7 @@ console.log(foo(true)); // `NaN`
 1. Convert encoding.
 1. Tokenize.
 1. Parse.
+1. Perform safety-checks.
 1. Generate Bytecode.
 1. Start execution.
 
@@ -211,7 +234,7 @@ console.log(foo(true)); // `NaN`
   * ServiceWorker loaders (3, 4)
 
 .small[
-(1) Impacts global performance.
+(1) May decrease global performance.
 
 (2) When the JS of the page doesn't change.
 
@@ -248,9 +271,9 @@ FunctionDeclaration:
         BindingIdentifier:
             name: "foo"
     params:
-        FormalParameters:
+        - FormalParameters:
             items:
-                BindingIdentifier:
+                - BindingIdentifier:
                     name: "x"
         rest: null,
     body: ...
@@ -264,7 +287,15 @@ That's an Abstract Syntax Tree (AST).
 
 ```js
 1: "foo",
-[/*FunctionDeclaration*/ 42,  /*isAsync*/0, /*isGenerator*/0, ..., /*name*//*BindingIdentifier*/ 43, /*foo*/1, ...]
+[
+    /*FunctionDeclaration*/ 42,
+    /*isAsync*/0,
+    /*isGenerator*/0,
+    ...,
+    /*name*//*BindingIdentifier*/ 43,
+    /*foo*/1,
+    ...
+]
 ```
 
 (except compressed)
@@ -278,7 +309,7 @@ That's an Abstract Syntax Tree (AST).
 ### Things the browser needs to do.
 
 1. Download binjs file.
-1. Tokenize + Parse **only what you use**.
+1. Tokenize + Parse + Check **only what you use**.
 1. Generate Bytecode.
 1. Start execution.
 
@@ -286,16 +317,15 @@ That's an Abstract Syntax Tree (AST).
 
 ### What is faster?
 
-1. Smaller file (1).
-1. Parsing can start earlier.
+1. Smaller file (WIP).
+1. Tokenization + Parsing can start earlier.
 1. Trivial tokenization.
 1. Format is **proof-carrying**.
   * Hard cases are already processed.
-1. Parse only the code you execute, when needed.
-1. Parse strings, identifiers, ... only once.
+  * Checks are fast.
+1. Parse **only** the code you execute, when needed.
+1. Parse strings, identifiers, ... only **once**.
 1. More opportunities for concurrency.
-
-(1) Hopefully.
 
 ---
 
