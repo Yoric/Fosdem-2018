@@ -26,11 +26,13 @@
 
 ![That's slow](img/slow.png)
 
+---
+
 ## Why is JavaScript loading so slow?
 
 ---
 
-### A few simple steps
+### Loading JavaScript
 
 1. Download source file.
 1. Decompress source file.
@@ -49,7 +51,7 @@
 ### Step 1: Get the code
 
 * Download and decompress source file.
-* Covert encoding.
+* Convert encoding.
 
 (typically two/three successive tasks)
 
@@ -129,7 +131,7 @@ FunctionDeclaration:
             items:
                 - BindingIdentifier:
                     name: "x"
-        rest: null,
+        rest: null
     body: ...
 ```
 
@@ -284,7 +286,7 @@ FunctionDeclaration:
             items:
                 - BindingIdentifier:
                     name: "x"
-        rest: null,
+        rest: null
     body: ...
 ```
 
