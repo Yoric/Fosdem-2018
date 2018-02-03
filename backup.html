@@ -224,393 +224,114 @@ blockquote {
 	</head>
 	<body>
 		<textarea id="source">
-# The JavaScript Binary AST
+# Backup demo slides!
 
-.center[A proposal to speed up the web]
-
-.center[Mozilla, Bloomberg, Facebook]
-
-.center[David Teller, Mozilla]
-
-.center[Fosdem 2018]
+Juuuuust in case this fancy computer cannot connect to the projector.
 
 ---
 
-## The problem
-
-- On the web, there's no such thing as fast enough.
-- JavaScript has become very fast but...
-
---
-
-- Google Sheets, Google Docs, Yahoo!, LinkedIn, Facebook: 3-7 compressed Mb+ JS code.
-- Updated *very* often.
-- Facebook: 500-900ms just *parsing* JavaScript (Chrome & Firefox).
-- And things are only getting worse.
-
----
-
-![That's slow](img/slow.png)
-
-## Why is JavaScript loading so slow?
-
----
-
-### A few simple steps
-
-1. Download source file.
-1. Decompress source file.
-1. Convert encoding.
-1. Tokenize.
-1. Parse.
-1. Generate Bytecode.
-1. Start execution.
-
----
-
-![Would That It Were So Simple](img/wouldthatitweresosimple.gif)
-
----
-
-### Step 1: Get the code
-
-* Download and decompress source file.
-* Covert encoding.
-
-(typically two/three successive tasks)
-
----
-
-### Step 2. Tokenize the text (1)
-
+## Source
 
 ```js
-function foo(x) {
-    return y;
-}
-```
+/*!
+ * jQuery JavaScript Library v3.3.1
+ * https://jquery.com/
+ *
+ * Includes Sizzle.js
+ * https://sizzlejs.com/
+ *
+ * Copyright JS Foundation and other contributors
+ * Released under the MIT license
+ * https://jquery.org/license
+ *
+ * Date: 2018-01-20T17:24Z
+ */
+( function( global, factory ) {
 
-.center[⇓]
+        "use strict";
 
-* `Token.FunctionKeyword`
-* `Token.Identifier(foo)`
-* `Token.LPar`
-* `Token.Identifier(x)`
-* `Token.RPar`
-* `Token.RBrace`
-* ...
+        if ( typeof module === "object" && typeof module.exports === "object" ) {
 
----
+                // For CommonJS and CommonJS-like environments where a proper `window`
+                // is present, execute the factory and get jQuery.
+                // For environments that do not have a `window` with a `document`
+                // (such as Node.js), expose a factory as module.exports.
+                // This accentuates the need for the creation of a real `window`.
+                // e.g. var jQuery = require("jquery")(window);
+                // See ticket #14549 for more info.
+                module.exports = global.document ?
+                        factory( global, true ) :
+                        function( w ) {
+                                if ( !w.document ) {
+                                        throw new Error( "jQuery requires a window with a document" );
+                                }
+                                return factory( w );
+                        };
+        } else {
+                factory( global );
+        }
 
-### Step 2. Tokenize the text (2)
-
-Exercises:
-
-* Is `for` an identifier or a keyword?
---
-
-* What does `/` mean?
---
-
-* Is `"use strict"` a string or a directive?
---
-
-* How can I store my string efficiently?
-
---
-
-* ...
-
---
-
-**Hint** it depends.
-
---
-
-Yeah, tokenization is hard. .mini[![Would That It Were So Simple](img/wouldthatitweresosimple.gif)]
-
-
----
-
-### Step 3. Parse the tokens (1)
-
-`[FunctionKeyword, Identifier(foo), ...]`
-
---
-
-.center[⇓]
-
---
-
-```yaml
-FunctionDeclaration:
-    isAsync: false
-    isGenerator: false
-    scope: ...
-    name:
-        BindingIdentifier:
-            name: "foo"
-    params:
-        - FormalParameters:
-            items:
-                - BindingIdentifier:
-                    name: "x"
-        rest: null,
-    body: ...
 ```
 
 ---
 
-### Step 3. Parse the tokens (2)
+## Compressing
 
-Exercise:
-
-```javascript
-var x = 10;
-function foo(isReady) {
-    if (isReady) {
-        return x + 10;
-    }
-    // ...
-}
+```sh
+$ ./target/debug/examples/encode --sections br --strings br --tree br --in tests/data/jquery-3.3.1.js --out /tmp/jquery-3.3.1.binjs
+Treating tests/data/jquery-3.3.1.js
+Output: /tmp/jquery-3.3.1.binjs
+Parsing.
+Annotating.
+Encoding.
+Writing.
+Successfully compressed 271751 bytes => 44938 bytes
 ```
-
-What is the return of `foo(true)`?
-
---
-
-**Hint** it depends.
 
 ---
 
-### Step 3. Parse the tokens (3)
-
-Parsing JS is hard:
+## Back to source
 
 ```js
-var x = 10;
-function foo(isReady) {
-    if (isReady) {
-        return x + 10;
+(function(global, factory) {
+  if (typeof module === "object" && typeof module.exports === "object") {
+    module.exports = global.document ? factory(global, true) : function(w) {
+      if (!w.document) {
+        throw new Error("jQuery requires a window with a document")
+      }
+      return factory(w)
     }
-}
-console.log(foo(true)); // `20`
-
-var x = 10;
-function foo(isReady) {
-    if (isReady) {
-        return x + 10;
-    }
-    var x = 10;
-}
-console.log(foo(true)); // `NaN`
+  } else {
+    factory(global)
+  }
+}(typeof window !== "undefined" ? window : this, function(window, noGlobal) {
+  var arr = [];
+  var document = window.document;
+  var getProto = Object.getPrototypeOf;
+  var slice = arr.slice;
+  var concat = arr.concat;
+  var push = arr.push;
+  var indexOf = arr.indexOf;
+  var class2type = {};
+  var toString = class2type.toString;
+  var hasOwn = class2type.hasOwnProperty;
+  var fnToString = hasOwn.toString;
+  var ObjectFunctionString = fnToString.call(Object);
+  var support = {};
+  var isFunction = function isFunction(obj) {
+    return typeof obj === "function" && typeof obj.nodeType !== "number"
+  };
+  var isWindow = function isWindow(obj) {
+    return obj != null && obj === obj.window
+  };
+  var preservedScriptAttributes = {
+    type: true,
+    src: true,
+    noModule: true
+  };
+  function DOMEval(code, doc, node) {
+    doc = doc || document;var i,
 ```
-
----
-
-### Step 3. Parse the tokens (4)
-
-
-* ...handle variables .mini[![Would That It Were So Simple](img/wouldthatitweresosimple.gif)];
-
---
-
-* ...handle `this` .mini[![Would That It Were So Simple](img/wouldthatitweresosimple.gif)];
-
---
-
-* ...handle `eval` .mini[![Would That It Were So Simple](img/wouldthatitweresosimple.gif)];
-
---
-
-* ...handle `with` .mini[![Would That It Were So Simple](img/wouldthatitweresosimple.gif)];
-
---
-
-* ...handle `"use strict"` .mini[![Would That It Were So Simple](img/wouldthatitweresosimple.gif)];
-
---
-
-* also, you can't skip anything;
-
----
-
-### Step 4. Wait, there's more!
-
-* Perform safety-checks on the code.
-* Generate browser-specific bytecode.
-* Execute!
-
----
-
-## So what can we make faster?
-
-1. Download source file.
-1. Decompress source file.
-1. Convert encoding.
-1. Tokenize.
-1. Parse.
-1. Perform safety-checks.
-1. Generate Bytecode.
-1. Start execution.
-
----
-
-### Things people have tried
-
-* Browser improvements
-   * Lazy parsers (1)
-   * Bytecode caching (2)
-* JavaScript frameworks/toolchains
-  * Minimizers (1)
-  * Lazy loaders (3)
-* Browser APIs
-  * Wasm (3)
-  * ServiceWorker loaders (3, 4)
-
-.small[
-(1) May decrease global performance.
-
-(2) When the JS of the page doesn't change.
-
-(3) Requires rewrite. Might not help.
-
-(4) Hurts the web.
-]
-
----
-
-## Introducing the JavaScript Binary AST
-
----
-
-### What is it?
-
-* A proposal for the JavaScript language, by Mozilla, Bloomberg, Facebook.
-* A new file format for JavaScript code.
-* Smaller than .js, much faster to parse.
-* **Not** uglified.
-* **Not** a bytecode.
-
----
-
-### Recall parsing
-
-
-```yaml
-FunctionDeclaration:
-    isAsync: false
-    isGenerator: false
-    scope: ...
-    name:
-        BindingIdentifier:
-            name: "foo"
-    params:
-        - FormalParameters:
-            items:
-                - BindingIdentifier:
-                    name: "x"
-        rest: null,
-    body: ...
-```
-
-That's an Abstract Syntax Tree (AST).
-
----
-
-### Storing the AST
-
-```js
-1: "foo",
-[
-    /*FunctionDeclaration*/ 42,
-    /*isAsync*/0,
-    /*isGenerator*/0,
-    ...,
-    /*name*//*BindingIdentifier*/ 43,
-    /*foo*/1,
-    ...
-]
-```
-
-(except compressed)
-
----
-
-## What's the point?
-
----
-
-### Things the browser needs to do.
-
-1. Download binjs file.
-1. Tokenize + Parse + Check **only what you use**.
-1. Generate Bytecode.
-1. Start execution.
-
----
-
-### What is faster?
-
-1. Smaller file (WIP).
-1. Tokenization + Parsing can start earlier.
-1. Trivial tokenization.
-1. Format is **proof-carrying**.
-  * Hard cases are already processed.
-  * Checks are fast.
-1. Parse **only** the code you execute, when needed.
-1. Parse strings, identifiers, ... only **once**.
-1. More opportunities for concurrency.
-
----
-
-## Is there time for a demo?
-
-
----
-
-## Calendar
-
----
-
-### Early 2017
-
-* Status: Proof of concept.
-* Security: None.
-* Speed: Extreme improvements (1).
-* File size: Pretty good improvements (1).
-* Standardization: Ecma step 1.
-
-(1) No hard numbers because it's too early to make promises.
-
----
-
-### Early 2018
-
-* Status: Prototype 3.
-* Security: As much as JavaScript, just easier to check.
-* Reference implementation: ~90%.
-* Firefox implementation: ~30%
-* Speed: Not measured yet.
-* File size: Improvements... but we want more.
-* Specifications: High-level specifications ~90%.
-
-
----
-
-### Hopefully late summer 2018
-
-* Experimental deployment on a few major websites.
-* Firefox implementation for opt-in users.
-* Discussion with other browser vendors on further optimizations.
-
----
-
-## Thanks for listening.
-
-![It's that simple](img/simple.png)
-
-### Any questions?
 		</textarea>
 		<script>require=(function(e,t,n){function i(n,s){if(!t[n]){if(!e[n]){var o=typeof require=="function"&&require;if(!s&&o)return o(n,!0);if(r)return r(n,!0);throw new Error("Cannot find module '"+n+"'")}var u=t[n]={exports:{}};e[n][0].call(u.exports,function(t){var r=e[n][1][t];return i(r?r:t)},u,u.exports)}return t[n].exports}var r=typeof require=="function"&&require;for(var s=0;s<n.length;s++)i(n[s]);return i})({"components/printing":[function(require,module,exports){
 module.exports=require('yoGRCZ');

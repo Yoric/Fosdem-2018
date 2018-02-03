@@ -1,21 +1,30 @@
 # The JavaScript Binary AST
 
-A proposal to speed up the web by Mozilla, Bloomberg, Facebook.
+.center[A proposal to speed up the web]
 
-David Teller, Mozilla
+.center[Mozilla, Bloomberg, Facebook]
 
-Fosdem 2018
+.center[David Teller, Mozilla]
+
+.center[Fosdem 2018]
 
 ---
 
 ## The problem
 
+- On the web, there's no such thing as fast enough.
+- JavaScript has become very fast but...
+
+--
+
 - Google Sheets, Google Docs, Yahoo!, LinkedIn, Facebook: 3-7 compressed Mb+ JS code.
 - Updated *very* often.
 - Facebook: 500-900ms just *parsing* JavaScript (Chrome & Firefox).
-- How can we make JS code start executing faster?
+- And things are only getting worse.
 
 ---
+
+![That's slow](img/slow.png)
 
 ## Why is JavaScript loading so slow?
 
@@ -330,6 +339,7 @@ That's an Abstract Syntax Tree (AST).
 ---
 
 ## Is there time for a demo?
+
 
 ---
 
