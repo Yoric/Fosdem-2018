@@ -111,7 +111,7 @@ Yeah, tokenization is hard. .mini[![Would That It Were So Simple](img/wouldthati
 FunctionDeclaration:
     isAsync: false
     isGenerator: false
-    scope: ...,
+    scope: ...
     name:
         BindingIdentifier:
             name: "foo"
@@ -266,7 +266,7 @@ console.log(foo(true)); // `NaN`
 FunctionDeclaration:
     isAsync: false
     isGenerator: false
-    scope: ...,
+    scope: ...
     name:
         BindingIdentifier:
             name: "foo"
